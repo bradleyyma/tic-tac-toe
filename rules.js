@@ -146,6 +146,7 @@ function reset_play(){
 	}
 
 	this.started = false;
+	this.turn = 1;
 
 }
 
@@ -199,7 +200,6 @@ function play() {
 			reset_play()
 			return;
 		}
-		if()
 		move.value = "";
 	}
 	else{
