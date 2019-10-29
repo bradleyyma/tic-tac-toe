@@ -173,16 +173,15 @@ function play() {
 		return;
 	}
 
+	//
 	var turn_info = document.getElementById("turn_info");
-	if(this.turn)
-		turn_info.innerHTML = "Turn for: <b id=\"turn\" style=\"display: inline;\">O</b>";
-	else
-		turn_info.innerHTML = "Turn for: <b id=\"turn\" style=\"display: inline;\">X</b>";
+
+
 
 	var move = document.getElementById("move_text_id");
 	if(table_ids.includes(move.value) && board_state[table_ids.indexOf(move.value)] == -1){
-		var whoseMove = whose_move();
 		var symbol;
+		var whoseMove = whose_move();
 		if(whoseMove)
 			symbol = "X";
 		else
@@ -193,6 +192,10 @@ function play() {
 		document.getElementById(move.value).innerHTML = symbol;
 
 		toggle_move();
+		if(whose_move())
+			turn_info.innerHTML = "Turn for: <b id=\"turn\" style=\"display: inline;\">X</b>";
+		else
+			turn_info.innerHTML = "Turn for: <b id=\"turn\" style=\"display: inline;\">O</b>";
 		var winner = winCheck();
 		if(winner)
 		{
