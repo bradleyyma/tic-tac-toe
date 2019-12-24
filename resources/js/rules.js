@@ -101,14 +101,19 @@ function begin_play(){
 		else {
 			player1.disabled = true;
 			player2.disabled = true;
-			player1.value += " (X)";
-			player2.value += " (O)";
 
+			var turn_info = document.getElementById("turn_info");
+			turn_info.innerHTML = "Turn for: <b id=\"turn\" style=\"display: inline;\">X</b>";
 
-			var turn = document.getElementById("turn_info");
-			turn.innerHTML = "Turn for: <b id=\"turn\" style=\"display: inline;\">X</b>";
+			this.started = true;
+			var begin_btn = document.getElementById("begin_btn");
+			var reset_btn = document.getElementById("reset_btn");
+			console.log("helo?");
+			begin_btn.disabled = true;
+			reset_btn.disabled = false;
 
-				this.started = true;
+			$(".square").html("X");
+
 		}
 	}
 
@@ -129,21 +134,24 @@ Remember to set the strated flag as false
 function reset_play(){
 	var player1 = document.getElementById("player1_id");
 	var player2 = document.getElementById("player2_id");
+	var begin_btn = document.getElementById("begin_btn");
 	var move = document.getElementById("move_text_id");
 
 	player1.value = "";
 	player2.value = "";
-	move.value = "";
 	player1.disabled = false;
 	player2.disabled = false;
+	begin_btn.disabled = false;
+
 	var turn_info = document.getElementById("turn_info");
-	turn_info.innerHTML = "Game has not begin.";
+	turn_info.innerHTML = "No Game in Progress.";
 
 	this.board_state = [-1, -1, -1, -1, -1, -1, -1, -1, -1];
-	for(var i = 0; i < 9; i++)
-	{
-		document.getElementById(table_ids[i]).innerHTML = table_ids[i];
-	}
+
+	$(".selected").toggleClass("square");
+	$(".selected").toggleClass("selected");
+	$(".square").html("");
+
 
 	this.started = false;
 	this.turn = 1;
@@ -166,7 +174,7 @@ The method should do all the things as stated in rule 2.
 8. After all the moves have exhausted, you're not required to display any message. (It should be obvious to Reset play.)<br/>
 
 */
-function play() {
+function play(cell_choice){
 	if(!this.started)
 	{
 		alert("The game has not started.")
@@ -176,26 +184,29 @@ function play() {
 	//
 	var turn_info = document.getElementById("turn_info");
 
-
-
-	var move = document.getElementById("move_text_id");
-	if(table_ids.includes(move.value) && board_state[table_ids.indexOf(move.value)] == -1){
+	if(table_ids.includes(cell_choice) && board_state[table_ids.indexOf(cell_choice)] == -1){
 		var symbol;
 		var whoseMove = whose_move();
 		if(whoseMove)
 			symbol = "X";
 		else
 			symbol = "O";
-		var index = table_ids.indexOf(move.value);
+		var index = table_ids.indexOf(cell_choice);
 
 		board_state[index] = whoseMove;
-		document.getElementById(move.value).innerHTML = symbol;
+		$("#" + cell_choice).toggleClass("square");
+		$("#" + cell_choice).toggleClass("selected");
+		document.getElementById(cell_choice).innerHTML = symbol;
 
 		toggle_move();
-		if(whose_move())
+		if(whose_move()){
 			turn_info.innerHTML = "Turn for: <b id=\"turn\" style=\"display: inline;\">X</b>";
-		else
+			$(".square").html("X");
+		}
+		else{
 			turn_info.innerHTML = "Turn for: <b id=\"turn\" style=\"display: inline;\">O</b>";
+			$(".square").html("O");
+		}
 		var winner = winCheck();
 		if(winner)
 		{
@@ -203,7 +214,6 @@ function play() {
 			reset_play()
 			return;
 		}
-		move.value = "";
 	}
 	else{
 		alert("Invalid move");
@@ -240,3 +250,10 @@ function moveEnter(event) {
 	}
 
 }
+
+$(document).ready(function(){
+	var width = $(".table").css('width');
+	$(".table").css('height', width);
+	var height = $(".table").css('height');
+	console.log(height);
+});
