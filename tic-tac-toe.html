@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Question 4</title>
+<title>TicTacToe</title>
 <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -23,7 +23,7 @@
 
 <div class="container">
 	<form>
-	  <div class="form-group row">
+	  <!-- <div class="form-group row">
 
 	    <div class="col-sm-6">
             <label for="player1" class="form-label">X:</label>
@@ -34,13 +34,22 @@
             <label for="player2" class="col-form-label">O:</label>
             <input type="text" class="form-control" id="player2_id" placeholder="Player2's Name">
 	    </div>
-	  </div>
-	  <div class="form-group row text-center">
-	    <div class="col-12 ">
-	      <button type="button" class="btn btn-primary" onclick="begin_play()" id="begin_btn">Begin Play</button>
-	      <button type="button" class="btn btn-primary" disabled="" onclick="reset_play()" id="reset_btn">Reset Play</button>
-	    </div>
-	  </div>
+	  </div> -->
+      <div class="text-center">
+          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <label class="btn btn-primary active"><input id="1player" type="radio" name="options" value="one_player" checked>1 Player</label>
+              <label class="btn btn-primary" ><input id="2player" type="radio" name="options" value="two_player">2 Player</label>
+          </div>
+          <br>
+          <br>
+          <div class="form-group row text-center">
+            <div class="col-12 ">
+              <button type="button" class="btn btn-primary" onclick="begin_play()" id="begin_btn">Begin Play</button>
+              <button type="button" class="btn btn-primary" disabled="" onclick="reset_play()" id="reset_btn">Reset Play</button>
+            </div>
+          </div>
+      </div>
+
 	</form>
 </div>
 <div class ="container">

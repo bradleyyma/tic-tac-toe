@@ -32,6 +32,8 @@ A variable to keep track of each players turn. Since the game always starts with
 */
 var turn = 1
 
+//variable to hold whether 1player or 2player mode
+var vs_comp
 /*
  @Return boolean
  @Param _str - A string variable - Note the type is not checked in the implementation
@@ -76,6 +78,26 @@ function game_started(){
 }
 
 
+//check if 1 player or 2 player was picked
+function against_bot(){
+	var player_choice = document.querySelector('input[name="options"]:checked').value
+	return player_choice
+}
+
+//implements the AI to play
+function bots_turn(){
+	//level easy (in order)
+	for(i = 0; i < 9; i++){
+		if(board_state[i] == -1){
+			play(table_ids[i])
+			return
+		}
+	}
+	//level medium (RNG)
+	//level hard (manimax algo)
+}
+
+
 /*
 TODO - Rule 1
 This is the first method you'll implement. This method is called when the Begin Play button is clicked.
@@ -88,80 +110,69 @@ The method should do all the validations as stated in rule 1.
 */
 
 function begin_play(){
-	if(game_started())
-	{
-		alert("Game has already started. Press Reset Play to reset");
+	vs_comp = against_bot()
+	if(game_started()){
+		alert("Game has already started. Press Reset Play to reset")
 	}
 	else {
-		var player1 = document.getElementById("player1_id");
-		var player2 = document.getElementById("player2_id");
-		if(isEmpty(player1.value) || isEmpty(player2.value)){
-			alert("Player names cannot be empty");
-		}
-		else {
-			player1.disabled = true;
-			player2.disabled = true;
+		// var player1 = document.getElementById("player1_id")
+		// var player2 = document.getElementById("player2_id")
+		// if(isEmpty(player1.value) || isEmpty(player2.value)){
+		// 	alert("Player names cannot be empty")
+		// }
+		// else {
+			// player1.disabled = true
+			// player2.disabled = true
 
-			var turn_info = document.getElementById("turn_info");
-			turn_info.innerHTML = "Turn for: <b id=\"turn\" style=\"display: inline;\">X</b>";
+			var turn_info = document.getElementById("turn_info")
+			turn_info.innerHTML = "Turn for: <b id=\"turn\" style=\"display: inline\">X</b>"
 
-			this.started = true;
-			var begin_btn = document.getElementById("begin_btn");
-			var reset_btn = document.getElementById("reset_btn");
-			console.log("helo?");
-			begin_btn.disabled = true;
-			reset_btn.disabled = false;
+			this.started = true
+			var begin_btn = document.getElementById("begin_btn")
+			var reset_btn = document.getElementById("reset_btn")
+			console.log("helo?")
+			begin_btn.disabled = true
+			reset_btn.disabled = false
 
-			$(".square").html("X");
+			$(".square").html("X")
 
-		}
+		// }
 	}
 
 
 }
 
 /*
-TODO - Rule 2
-This is the second method you'll implement. This method is called when the Reset Play button is clicked.
-The method should do all the things as stated in rule 2.
-1. The reset play button should reset the whole game.(At any time when reset is clicked - All the three text boxes should be cleared and Turn should be set to the default message.)
-2. The text boxes for entering name should be enablled back.
-3. The Tic Tac Toe Grid should be set to its default entries.
-4. Clicking reset play again and again shall have the same effect.(or no effect when clicked multiple times)
-Remember to set the strated flag as false
-
+	reset board and board state
 */
 function reset_play(){
-	var player1 = document.getElementById("player1_id");
-	var player2 = document.getElementById("player2_id");
-	var begin_btn = document.getElementById("begin_btn");
-	var move = document.getElementById("move_text_id");
+	// var player1 = document.getElementById("player1_id")
+	// var player2 = document.getElementById("player2_id")
+	var begin_btn = document.getElementById("begin_btn")
+	var move = document.getElementById("move_text_id")
 
-	player1.value = "";
-	player2.value = "";
-	player1.disabled = false;
-	player2.disabled = false;
-	begin_btn.disabled = false;
+	// player1.value = ""
+	// player2.value = ""
+	// player1.disabled = false
+	// player2.disabled = false
+	begin_btn.disabled = false
 
-	var turn_info = document.getElementById("turn_info");
-	turn_info.innerHTML = "No Game in Progress.";
+	var turn_info = document.getElementById("turn_info")
+	turn_info.innerHTML = "No Game in Progress."
 
-	this.board_state = [-1, -1, -1, -1, -1, -1, -1, -1, -1];
+	this.board_state = [-1, -1, -1, -1, -1, -1, -1, -1, -1]
 
-	$(".selected").toggleClass("square");
-	$(".selected").toggleClass("selected");
-	$(".square").html("");
+	$(".selected").toggleClass("square")
+	$(".selected").toggleClass("selected")
+	$(".square").html("")
 
 
-	this.started = false;
-	this.turn = 1;
+	this.started = false
+	this.turn = 1
 
 }
 
 /*
-TODO - Rule 3
-This is the last method you'll implement. This method is called everytime a move has been player( Play button was clicked).
-The method should do all the things as stated in rule 2.
 1. The moves should be validated can only be these ["A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3"]
 2. Invalid moves should be reported by an alert message.(You are encorraged to use Modal which you learned in HW1 - Usage is not mandatory.)
 3. If the move is a valid move, the grid should be updated with the correct move (Player 1 is always - 'X', and Player 2 is always 'O' (This is not zero!)) - The turn information should also be updated
@@ -172,72 +183,81 @@ The method should do all the things as stated in rule 2.
    If the there is winner - Show it in an alert message - (Ex - Winner is X or O) - Displaying name is not important. <br/>
 7. The game should reset itself once a winner is determined.<br/>
 8. After all the moves have exhausted, you're not required to display any message. (It should be obvious to Reset play.)<br/>
-
 */
 function play(cell_choice){
 	if(!this.started)
 	{
 		alert("The game has not started.")
-		return;
+		return
 	}
 
-	//
-	var turn_info = document.getElementById("turn_info");
+	var turn_info = document.getElementById("turn_info")
 
 	if(table_ids.includes(cell_choice) && board_state[table_ids.indexOf(cell_choice)] == -1){
-		var symbol;
-		var whoseMove = whose_move();
+		var symbol
+		var whoseMove = whose_move()
 		if(whoseMove)
-			symbol = "X";
+			symbol = "X"
 		else
-			symbol = "O";
-		var index = table_ids.indexOf(cell_choice);
+			symbol = "O"
+		var index = table_ids.indexOf(cell_choice)
 
-		board_state[index] = whoseMove;
-		$("#" + cell_choice).toggleClass("square");
-		$("#" + cell_choice).toggleClass("selected");
-		document.getElementById(cell_choice).innerHTML = symbol;
+		board_state[index] = whoseMove
+		$("#" + cell_choice).toggleClass("square")
+		$("#" + cell_choice).toggleClass("selected")
+		document.getElementById(cell_choice).innerHTML = symbol
 
-		toggle_move();
+		toggle_move()
 		if(whose_move()){
-			turn_info.innerHTML = "Turn for: <b id=\"turn\" style=\"display: inline;\">X</b>";
-			$(".square").html("X");
+			turn_info.innerHTML = "Turn for: <b id=\"turn\" style=\"display: inline\">X</b>"
+			$(".square").html("X")
 		}
 		else{
-			turn_info.innerHTML = "Turn for: <b id=\"turn\" style=\"display: inline;\">O</b>";
-			$(".square").html("O");
+			turn_info.innerHTML = "Turn for: <b id=\"turn\" style=\"display: inline\">O</b>"
+			$(".square").html("O")
 		}
-		var winner = winCheck();
-		if(winner)
-		{
-			alert("Winner is " + winner)
-			reset_play()
-			return;
+		var end = endCheck()
+		if(end == "X" || end == "O"){
+			alert("Winner is " + end)
+			return
+		}
+		else if (end == "T") {
+			alert("It's a tie!")
+			return
+		}
+		console.log(whose_move())
+		if(!whose_move() && vs_comp == 'one_player'){
+			bots_turn()
 		}
 	}
 	else{
-		alert("Invalid move");
+		alert("Invalid move")
 	}
-	return;
+	return
 
 }
 
-function winCheck(){
-	var combos = [[0, 1, 2],[3, 4, 5],[6, 7, 8],[0, 3, 6],[1, 4, 7],[2, 5, 8],[0, 4, 8],[2, 4, 6]];
+function endCheck(){
+	var combos = [[0, 1, 2],[3, 4, 5],[6, 7, 8],[0, 3, 6],[1, 4, 7],[2, 5, 8],[0, 4, 8],[2, 4, 6]]
 	for(var i = 0; i < 8; i++)
 	{
-		var first = board_state[combos[i][0]];
-		var second = board_state[combos[i][1]];
+		var first = board_state[combos[i][0]]
+		var second = board_state[combos[i][1]]
 		var third = board_state[combos[i][2]]
 
 		if(first == second && second == third && first != -1){
 			if(first == 1)
-				return "X";
+				return "X"
 			else
 				return "O"
 		}
 	}
-	return 0;
+	if(!board_state.includes(-1)){
+		return "T"
+	}
+	else {
+		return 0
+	}
 }
 
 /*
@@ -252,8 +272,8 @@ function moveEnter(event) {
 }
 
 $(document).ready(function(){
-	var width = $(".table").css('width');
-	$(".table").css('height', width);
-	var height = $(".table").css('height');
-	console.log(height);
-});
+	var width = $(".table").css('width')
+	$(".table").css('height', width)
+	var height = $(".table").css('height')
+	console.log(height)
+})
