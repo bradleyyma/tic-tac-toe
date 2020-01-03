@@ -37,12 +37,20 @@
 	  </div> -->
       <div class="text-center">
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
-              <label class="btn btn-primary active"><input id="1player" type="radio" name="options" value="one_player" checked>1 Player</label>
-              <label class="btn btn-primary" ><input id="2player" type="radio" name="options" value="two_player">2 Player</label>
+              <label id="1player" class="btn btn-primary active"><input id="1player" type="radio" name="options" value="one_player" checked>1 Player</label>
+              <label id="2player" class="btn btn-primary" ><input id="2player" type="radio" name="options" value="two_player">2 Player</label>
           </div>
           <br>
           <br>
-          <div class="form-group row text-center">
+          <div id="difficulty" class="form-group row">
+              <label for="">Difficulty:</label>
+              <select id="level" class="" name="">
+                  <option value="easy">Easy</option>
+                  <option value="med">Medium</option>
+                  <option value="hard">Hard</option>
+              </select>
+          </div>
+          <div class="form-group row">
             <div class="col-12 ">
               <button type="button" class="btn btn-primary" onclick="begin_play()" id="begin_btn">Begin Play</button>
               <button type="button" class="btn btn-primary" disabled="" onclick="reset_play()" id="reset_btn">Reset Play</button>

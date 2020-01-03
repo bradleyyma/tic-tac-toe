@@ -19,7 +19,15 @@ Similarly, A move by player 2(who is O) at Cell 'A3' --- The board_state[2] will
 We store the move of player 1 as '1' and player 2 as '0'. So after the above two moves the state should look like
 [1, -1, 0, -1, -1, -1, -1, -1, -1]
 */
-var board_state = [-1,-1,-1,-1,-1,-1,-1,-1,-1]
+var board_state = [	-1,-1,-1,
+					-1,-1,-1,
+					-1,-1,-1 ]
+
+/*
+array for random AI model. I will mutilate this array in order to track which indexes is available and use a random
+function to choose out these indexes.
+*/
+var index_for_random = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
 
 // A flag to keep track of the status of the game, false means the game is not started. The default value is set to false
@@ -34,6 +42,9 @@ var turn = 1
 
 //variable to hold whether 1player or 2player mode
 var vs_comp
+
+//difficulty of AI
+var dif
 /*
  @Return boolean
  @Param _str - A string variable - Note the type is not checked in the implementation
@@ -77,24 +88,30 @@ function game_started(){
 	return this.started
 }
 
-
-//check if 1 player or 2 player was picked
-function against_bot(){
-	var player_choice = document.querySelector('input[name="options"]:checked').value
-	return player_choice
-}
-
 //implements the AI to play
 function bots_turn(){
 	//level easy (in order)
-	for(i = 0; i < 9; i++){
-		if(board_state[i] == -1){
-			play(table_ids[i])
-			return
+	if(dif == 'easy'){
+		for(i = 0; i < 9; i++){
+			if(board_state[i] == -1){
+				play(table_ids[i])
+				return
+			}
 		}
 	}
 	//level medium (RNG)
+	else if(dif == 'med'){
+
+	}
+
 	//level hard (manimax algo)
+	else if(dif == 'hard'){
+
+	}
+}
+
+function medium_bot(){
+
 }
 
 
@@ -110,7 +127,16 @@ The method should do all the validations as stated in rule 1.
 */
 
 function begin_play(){
-	vs_comp = against_bot()
+
+	//numplayers choice (one_player or two_player)
+	vs_comp = document.querySelector('input[name="options"]:checked').value
+
+	//difficulty chocie
+	if(vs_comp == "one_player")
+		dif = document.getElementById("level").value
+
+	console.log(dif)
+
 	if(game_started()){
 		alert("Game has already started. Press Reset Play to reset")
 	}
@@ -130,7 +156,6 @@ function begin_play(){
 			this.started = true
 			var begin_btn = document.getElementById("begin_btn")
 			var reset_btn = document.getElementById("reset_btn")
-			console.log("helo?")
 			begin_btn.disabled = true
 			reset_btn.disabled = false
 
@@ -271,9 +296,18 @@ function moveEnter(event) {
 
 }
 
+
+
 $(document).ready(function(){
 	var width = $(".table").css('width')
 	$(".table").css('height', width)
 	var height = $(".table").css('height')
 	console.log(height)
+
+	$("#1player").click(function() {
+		$("#difficulty").css("display", "block")
+	})
+	$("#2player").click(function() {
+		$("#difficulty").css("display", "none")
+	})
 })
