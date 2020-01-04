@@ -1,24 +1,7 @@
-/*
-[IMPORTANT]
-You are free to create any number of helper function you want.
-We know the problem could be seached online, and we are aware of those solutions.
-So please sight sources if you took help from any online resource.
-*/
-
-
-
 //IDs for all the table elements. You get the cell element just by using document.getElementById("A1")
 var table_ids = ["A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3"]
 
-/*
-An integer array of length 9.
-Usaged: This is to store the state to the tictactoe board.
-When a move is made
-(Example player 1 (who is X) move at Cell 'A1' --- The board_state[0] will be made 1 )
-Similarly, A move by player 2(who is O) at Cell 'A3' --- The board_state[2] will be made 0 )
-We store the move of player 1 as '1' and player 2 as '0'. So after the above two moves the state should look like
-[1, -1, 0, -1, -1, -1, -1, -1, -1]
-*/
+//-1 for unplayed, 1 for X, 0 for O
 var board_state = [-1,-1,-1,-1,-1,-1,-1,-1,-1]
 
 
@@ -34,11 +17,8 @@ var turn = 1
 
 //variable to hold whether 1player or 2player mode
 var vs_comp
-/*
- @Return boolean
- @Param _str - A string variable - Note the type is not checked in the implementation
- The methods @Returns true is the _str is null or it has a length of 0, otherwise, the methods returns false
-*/
+
+//check if string is empty
 function isEmpty(_str) {
 	return (!_str || 0 === _str.length)
 }
@@ -61,7 +41,7 @@ if the turn is set to 1 it will make it 0
 if the turn is set to 0 it will make it 1
 */
 function toggle_move() {
-	this.turn = !this.turn
+	this.turn ^= 1
 }
 
 /*
@@ -85,18 +65,95 @@ function against_bot(){
 }
 
 //implements the AI to play
-function bots_turn(){
+function bots_turn(dif){
 	//level easy (in order)
-	for(i = 0; i < 9; i++){
-		if(board_state[i] == -1){
-			play(table_ids[i])
-			return
+	if(dif == 'easy'){
+		for(i = 0; i < 9; i++){
+			if(this.board_state[i] == -1){
+				play(table_ids[i])
+				return
+			}
 		}
 	}
 	//level medium (RNG)
 	//level hard (manimax algo)
+	if(dif == 'hard'){
+		var move_index = minimax(0, this.turn)
+		play(table_ids[move_index])
+	}
+
 }
 
+function minimax(depth, isMax){
+	var score = endCheck()
+
+	if(score == "X")
+		return (10 - depth)
+	if(score == "O")
+		return (-10 + depth)
+
+	if(score == "T")
+		return 0
+
+	var best
+	var best_move
+	if(isMax)
+		best = -100
+	else
+		best = 100
+
+	for(var i = 0; i < 9; i++){
+		if(this.board_state[i] == -1){
+			this.board_state[i] = isMax
+			minimax_score = minimax(depth+1, isMax ^ 1)
+			if(isMax){
+				if(minimax_score > best){
+					best = minimax_score
+					best_move = i;
+				}
+			}
+			else{
+				if(depth == 0){
+					console.log("minimax_score:", minimax_score)
+				}
+				if(minimax_score < best){
+					best = minimax_score
+					best_move = i
+				}
+			}
+
+			this.board_state[i] = -1
+
+		}
+	}
+	if(depth == 0)
+		return best_move
+	else
+		return best
+}
+
+function endCheck(){
+	var combos = [[0, 1, 2],[3, 4, 5],[6, 7, 8],[0, 3, 6],[1, 4, 7],[2, 5, 8],[0, 4, 8],[2, 4, 6]]
+	for(var i = 0; i < 8; i++)
+	{
+		var first = this.board_state[combos[i][0]]
+		var second = this.board_state[combos[i][1]]
+		var third = this.board_state[combos[i][2]]
+
+		if(first == second && second == third && first != -1){
+			if(first == 1)
+				return "X"
+			else
+				return "O"
+		}
+	}
+	if(!this.board_state.includes(-1)){
+		return "T"
+	}
+	else {
+		return 0
+	}
+}
 
 /*
 TODO - Rule 1
@@ -193,7 +250,7 @@ function play(cell_choice){
 
 	var turn_info = document.getElementById("turn_info")
 
-	if(table_ids.includes(cell_choice) && board_state[table_ids.indexOf(cell_choice)] == -1){
+	if(table_ids.includes(cell_choice) && this.board_state[table_ids.indexOf(cell_choice)] == -1){
 		var symbol
 		var whoseMove = whose_move()
 		if(whoseMove)
@@ -202,7 +259,9 @@ function play(cell_choice){
 			symbol = "O"
 		var index = table_ids.indexOf(cell_choice)
 
-		board_state[index] = whoseMove
+		if(!whoseMove)
+			console.log('BOT MOVED~!')
+		this.board_state[index] = whoseMove
 		$("#" + cell_choice).toggleClass("square")
 		$("#" + cell_choice).toggleClass("selected")
 		document.getElementById(cell_choice).innerHTML = symbol
@@ -218,46 +277,23 @@ function play(cell_choice){
 		}
 		var end = endCheck()
 		if(end == "X" || end == "O"){
-			alert("Winner is " + end)
+			setTimeout(function(){alert("Winner is " + end)}, 1)
 			return
 		}
 		else if (end == "T") {
 			alert("It's a tie!")
 			return
 		}
-		console.log(whose_move())
 		if(!whose_move() && vs_comp == 'one_player'){
 			bots_turn()
 		}
+
 	}
 	else{
 		alert("Invalid move")
 	}
 	return
 
-}
-
-function endCheck(){
-	var combos = [[0, 1, 2],[3, 4, 5],[6, 7, 8],[0, 3, 6],[1, 4, 7],[2, 5, 8],[0, 4, 8],[2, 4, 6]]
-	for(var i = 0; i < 8; i++)
-	{
-		var first = board_state[combos[i][0]]
-		var second = board_state[combos[i][1]]
-		var third = board_state[combos[i][2]]
-
-		if(first == second && second == third && first != -1){
-			if(first == 1)
-				return "X"
-			else
-				return "O"
-		}
-	}
-	if(!board_state.includes(-1)){
-		return "T"
-	}
-	else {
-		return 0
-	}
 }
 
 /*
