@@ -33,6 +33,7 @@ var turn = 1
 
 //variable to hold whether 1player or 2player mode
 var vs_comp
+var dif
 
 //check if string is empty
 function isEmpty(_str) {
@@ -74,7 +75,7 @@ function game_started(){
 }
 
 //implements the AI to play
-function bots_turn(dif){
+function bots_turn(){
 	//level easy (in order)
 	if(dif == 'easy'){
 		for(i = 0; i < 9; i++){
@@ -186,7 +187,7 @@ function begin_play(){
 
 	//difficulty chocie
 	if(vs_comp == "one_player")
-		dif = document.getElementById("level").value
+	 	dif = document.getElementById("level").value
 
 	console.log(dif)
 
