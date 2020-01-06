@@ -78,18 +78,10 @@ function game_started(){
 function bots_turn(){
 	//level easy (in order)
 	if(dif == 'easy'){
-		for(i = 0; i < 9; i++){
-			if(this.board_state[i] == -1){
-				play(table_ids[i])
-				return
-			}
-		}
+		var rand_index = Math.floor(Math.random() * index_for_random.length)
+		var rand_move = index_for_random[rand_index]
+		play(table_ids[rand_move])
 	}
-	//level medium (RNG)
-	else if(dif == 'med'){
-
-	}
-
 	//level hard (manimax algo)
 	if(dif == 'hard'){
 		var move_index = minimax(0, this.turn)
@@ -214,11 +206,7 @@ function begin_play(){
 			reset_btn.disabled = false
 
 			$(".square").html("X")
-
-		// }
 	}
-
-
 }
 
 /*
@@ -240,6 +228,7 @@ function reset_play(){
 	turn_info.innerHTML = "No Game in Progress."
 
 	this.board_state = [-1, -1, -1, -1, -1, -1, -1, -1, -1]
+	this.index_for_random = [0, 1, 2, 3, 4, 5 , 6, 7, 8]
 
 	$(".selected").toggleClass("square")
 	$(".selected").toggleClass("selected")
@@ -284,6 +273,8 @@ function play(cell_choice){
 		if(!whoseMove)
 			console.log('BOT MOVED~!')
 		this.board_state[index] = whoseMove
+		index_for_random.splice(index_for_random.indexOf(index), 1)
+
 		$("#" + cell_choice).toggleClass("square")
 		$("#" + cell_choice).toggleClass("selected")
 		document.getElementById(cell_choice).innerHTML = symbol
@@ -315,21 +306,7 @@ function play(cell_choice){
 		alert("Invalid move")
 	}
 	return
-
 }
-
-/*
-Do not change this method.
-*/
-function moveEnter(event) {
-	if(event.keyCode == 13) {
-		event.preventDefault()
-		play()
-	}
-
-}
-
-
 
 $(document).ready(function(){
 	var width = $(".table").css('width')
