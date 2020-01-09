@@ -78,20 +78,20 @@ function game_started(){
 function bots_turn(){
 	//level easy (in order)
 	if(dif == 'easy'){
-		var rand_index = Math.floor(Math.random() * index_for_random.length)
-		var rand_move = index_for_random[rand_index]
+		let rand_index = Math.floor(Math.random() * index_for_random.length)
+		let rand_move = index_for_random[rand_index]
 		play(table_ids[rand_move])
 	}
 	//level hard (manimax algo)
 	if(dif == 'hard'){
-		var move_index = minimax(0, this.turn)
+		let move_index = minimax(0, this.turn)
 		play(table_ids[move_index])
 	}
 
 }
 
 function minimax(depth, isMax){
-	var score = endCheck()
+	let score = endCheck()
 
 	if(score == "X")
 		return (10 - depth)
@@ -101,14 +101,14 @@ function minimax(depth, isMax){
 	if(score == "T")
 		return 0
 
-	var best
-	var best_move
+	let best
+	let best_move
 	if(isMax)
 		best = -100
 	else
 		best = 100
 
-	for(var i = 0; i < 9; i++){
+	for(let i = 0; i < 9; i++){
 		if(this.board_state[i] == -1){
 			this.board_state[i] = isMax
 			minimax_score = minimax(depth+1, isMax ^ 1)
@@ -132,6 +132,7 @@ function minimax(depth, isMax){
 
 		}
 	}
+	//when returning to bots_turn function, we only need the move, not score
 	if(depth == 0)
 		return best_move
 	else
@@ -139,12 +140,12 @@ function minimax(depth, isMax){
 }
 
 function endCheck(){
-	var combos = [[0, 1, 2],[3, 4, 5],[6, 7, 8],[0, 3, 6],[1, 4, 7],[2, 5, 8],[0, 4, 8],[2, 4, 6]]
-	for(var i = 0; i < 8; i++)
+	let combos = [[0, 1, 2],[3, 4, 5],[6, 7, 8],[0, 3, 6],[1, 4, 7],[2, 5, 8],[0, 4, 8],[2, 4, 6]]
+	for(let i = 0; i < 8; i++)
 	{
-		var first = this.board_state[combos[i][0]]
-		var second = this.board_state[combos[i][1]]
-		var third = this.board_state[combos[i][2]]
+		let first = this.board_state[combos[i][0]]
+		let second = this.board_state[combos[i][1]]
+		let third = this.board_state[combos[i][2]]
 
 		if(first == second && second == third && first != -1){
 			if(first == 1)
@@ -187,21 +188,12 @@ function begin_play(){
 		alert("Game has already started. Press Reset Play to reset")
 	}
 	else {
-		// var player1 = document.getElementById("player1_id")
-		// var player2 = document.getElementById("player2_id")
-		// if(isEmpty(player1.value) || isEmpty(player2.value)){
-		// 	alert("Player names cannot be empty")
-		// }
-		// else {
-			// player1.disabled = true
-			// player2.disabled = true
-
-			var turn_info = document.getElementById("turn_info")
+			let turn_info = document.getElementById("turn_info")
 			turn_info.innerHTML = "Turn for: <b id=\"turn\" style=\"display: inline\">X</b>"
 
 			this.started = true
-			var begin_btn = document.getElementById("begin_btn")
-			var reset_btn = document.getElementById("reset_btn")
+			let begin_btn = document.getElementById("begin_btn")
+			let reset_btn = document.getElementById("reset_btn")
 			begin_btn.disabled = true
 			reset_btn.disabled = false
 
@@ -213,18 +205,12 @@ function begin_play(){
 	reset board and board state
 */
 function reset_play(){
-	// var player1 = document.getElementById("player1_id")
-	// var player2 = document.getElementById("player2_id")
-	var begin_btn = document.getElementById("begin_btn")
-	var move = document.getElementById("move_text_id")
 
-	// player1.value = ""
-	// player2.value = ""
-	// player1.disabled = false
-	// player2.disabled = false
+	let begin_btn = document.getElementById("begin_btn")
+
 	begin_btn.disabled = false
 
-	var turn_info = document.getElementById("turn_info")
+	let turn_info = document.getElementById("turn_info")
 	turn_info.innerHTML = "No Game in Progress."
 
 	this.board_state = [-1, -1, -1, -1, -1, -1, -1, -1, -1]
@@ -241,16 +227,8 @@ function reset_play(){
 }
 
 /*
-1. The moves should be validated can only be these ["A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3"]
-2. Invalid moves should be reported by an alert message.(You are encorraged to use Modal which you learned in HW1 - Usage is not mandatory.)
-3. If the move is a valid move, the grid should be updated with the correct move (Player 1 is always - 'X', and Player 2 is always 'O' (This is not zero!)) - The turn information should also be updated
-	Hint: Use the turn variable to figure out who is currently playing. Use to toggle method to change moves.
-4. A move should always be a valid move. (Example: If say a move was made in already filled cell, it should be invalidated with an alert.)
-5. If the game has not started, clicking on <b>Play</b> should give an alert "The game has not started."<br/>
-6. After any move, the state of the table should be validated.(see the document attached in the homework)
-   If the there is winner - Show it in an alert message - (Ex - Winner is X or O) - Displaying name is not important. <br/>
-7. The game should reset itself once a winner is determined.<br/>
-8. After all the moves have exhausted, you're not required to display any message. (It should be obvious to Reset play.)<br/>
+1. check if move is valid
+2. play the move/adjust html/css
 */
 function play(cell_choice){
 	if(!this.started)
@@ -259,16 +237,16 @@ function play(cell_choice){
 		return
 	}
 
-	var turn_info = document.getElementById("turn_info")
+	let turn_info = document.getElementById("turn_info")
 
 	if(table_ids.includes(cell_choice) && this.board_state[table_ids.indexOf(cell_choice)] == -1){
-		var symbol
-		var whoseMove = whose_move()
+		let symbol
+		let whoseMove = whose_move()
 		if(whoseMove)
 			symbol = "X"
 		else
 			symbol = "O"
-		var index = table_ids.indexOf(cell_choice)
+		let index = table_ids.indexOf(cell_choice)
 
 		if(!whoseMove)
 			console.log('BOT MOVED~!')
@@ -288,7 +266,7 @@ function play(cell_choice){
 			turn_info.innerHTML = "Turn for: <b id=\"turn\" style=\"display: inline\">O</b>"
 			$(".square").html("O")
 		}
-		var end = endCheck()
+		let end = endCheck()
 		if(end == "X" || end == "O"){
 			setTimeout(function(){alert("Winner is " + end)}, 1)
 			return
@@ -309,9 +287,9 @@ function play(cell_choice){
 }
 
 $(document).ready(function(){
-	var width = $(".table").css('width')
+	let width = $(".table").css('width')
 	$(".table").css('height', width)
-	var height = $(".table").css('height')
+	let height = $(".table").css('height')
 	console.log(height)
 
 	$("#1player").click(function() {
