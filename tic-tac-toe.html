@@ -1,88 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TicTacToe</title>
-<link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="resources/js/rules.js"></script>
-<link rel="stylesheet" href="resources/css/style.css">
-</head>
-<body>
-<div class="jumbotron jumbotron-fluid">
-  	<div class="container">
-  		<h1>TicTacToe</h1>
-  		<a href="https://www.google.com/search?q=tic+tac+toe" alt="how to play" target="_blank">How to play Tic-Tac-Toe</a><br/>
-	</div>
-</div>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>TicTacToe</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <!-- Load React. -->
+        <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+        <script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script>
+        <!-- JSX -->
+        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 
-<div class="container">
-	<form>
-	  <!-- <div class="form-group row">
+        </script>
 
-	    <div class="col-sm-6">
-            <label for="player1" class="form-label">X:</label>
-            <input type="text" class="form-control" id="player1_id" placeholder="Player1's Name">
-	    </div>
+        <!-- <script type="text/javascript" src="resources/js/rules.js"></script> -->
+        <link rel="stylesheet" href="resources/css/style.css">
+    </head>
+    <body>
+        <div class="jumbotron jumbotron-fluid">
+          	<div class="container">
+          		<h1>TicTacToe</h1>
+          		<a href="https://www.google.com/search?q=tic+tac+toe" alt="how to play" target="_blank">How to play Tic-Tac-Toe</a><br/>
+        	</div>
+        </div>
 
-        <div class="col-sm-6">
-            <label for="player2" class="col-form-label">O:</label>
-            <input type="text" class="form-control" id="player2_id" placeholder="Player2's Name">
-	    </div>
-	  </div> -->
-      <div class="text-center">
-          <div class="btn-group btn-group-toggle" data-toggle="buttons">
-              <label id="1player" class="btn btn-primary active"><input id="1player" type="radio" name="options" value="one_player" checked>1 Player</label>
-              <label id="2player" class="btn btn-primary" ><input id="2player" type="radio" name="options" value="two_player">2 Player</label>
-          </div>
-          <br>
-          <br>
-          <div id="difficulty" class="form-group row">
-              <label for="">Difficulty:</label>
-              <select id="level" class="" name="">
-                  <option value="easy">Easy</option>
-                  <option value="hard">Hard</option>
-              </select>
-          </div>
-          <div class="form-group row">
-            <div class="col-12 ">
-              <button type="button" class="btn btn-primary" onclick="begin_play()" id="begin_btn">Begin Play</button>
-              <button type="button" class="btn btn-primary" disabled="" onclick="reset_play()" id="reset_btn">Reset Play</button>
-            </div>
-          </div>
-      </div>
+        <!-- Load our React component. -->
+        <script src="resources/js/index.js" type="text/babel"></script>
 
-	</form>
-</div>
-<div class ="container">
+        <div id="errors" style="
+          background: #c00;
+          color: #fff;
+          display: none;
+          margin: -20px -20px 20px;
+          padding: 20px;
+          white-space: pre-wrap;
+        "></div>
+        <div id="root"></div>
 
-	<div id ="turn_info" class="text-center">
-		No Game in Progress
-	</div>
-	<br/>
-</div>
-
-<div class="table container">
-
-    <!-- 1st row */ -->
-    <div class="square" id="A1" onclick="play('A1')"></div>
-    <div class="square" id="A2" onclick="play('A2')"></div>
-    <div class="square" id="A3" onclick="play('A3')"></div>
-    <!-- 2nd row */ -->
-    <div class="square" id="B1" onclick="play('B1')"></div>
-    <div class="square" id="B2" onclick="play('B2')"></div>
-    <div class="square" id="B3" onclick="play('B3')"></div>
-    <!-- 3rd row */ -->
-    <div class="square" id="C1" onclick="play('C1')"></div>
-    <div class="square" id="C2" onclick="play('C2')"></div>
-    <div class="square" id="C3" onclick="play('C3')"></div>
-
-
-</div>
-</body>
+        <script>
+        window.addEventListener('mousedown', function(e) {
+          document.body.classList.add('mouse-navigation');
+          document.body.classList.remove('kbd-navigation');
+        });
+        window.addEventListener('keydown', function(e) {
+          if (e.keyCode === 9) {
+            document.body.classList.add('kbd-navigation');
+            document.body.classList.remove('mouse-navigation');
+          }
+        });
+        window.addEventListener('click', function(e) {
+          if (e.target.tagName === 'A' && e.target.getAttribute('href') === '#') {
+            e.preventDefault();
+          }
+        });
+        window.onerror = function(message, source, line, col, error) {
+          var text = error ? error.stack || error : message + ' (at ' + source + ':' + line + ':' + col + ')';
+          errors.textContent += text + '\n';
+          errors.style.display = '';
+        };
+        console.error = (function(old) {
+          return function error() {
+            errors.textContent += Array.prototype.slice.call(arguments).join(' ') + '\n';
+            errors.style.display = '';
+            old.apply(this, arguments);
+          }
+        })(console.error);
+        </script>
+    </body>
 </html>
