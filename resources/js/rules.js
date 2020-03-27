@@ -287,11 +287,6 @@ function play(cell_choice){
 }
 
 $(document).ready(function(){
-	let width = $(".table").css('width')
-	$(".table").css('height', width)
-	let height = $(".table").css('height')
-	console.log(height)
-
 	$("#1player").click(function() {
 		$("#difficulty").css("display", "block")
 	})
